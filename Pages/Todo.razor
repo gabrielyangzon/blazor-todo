@@ -1,0 +1,55 @@
+﻿@page "/todo"
+@using BlazorApp1.Model;
+
+<input placeholder="Something todo" @bind="newTodo" />
+
+<button @onclick="AddTodo" class="btn btn-primary">Add todo</button>
+
+
+
+<div class="row">
+
+    <div class="col">
+        <h3>Todos (@todoItems.Where(x => !x.IsDone).Count())</h3>
+        <ul>
+            @foreach (TodoItem item in todoItems.Where(x => !x.IsDone))
+            {
+                <li class="mb-1">
+                    <input type="checkbox" @bind="item.IsDone" />
+                    <input @bind="item.Title" />
+                </li>
+            }
+        </ul>
+    </div>
+    <div class="col">
+        <h3>Done  (@todoItems.Where(x => x.IsDone).Count())</h3>
+        <ul>
+            @foreach (TodoItem item in todoItems.Where(x => x.IsDone))
+            {
+                <li class="mb-1">
+                    <input type="checkbox" @bind="item.IsDone" />
+                    <input @bind="item.Title" />
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+
+@code {
+    private List<TodoItem> todoItems = new();
+
+    private string? newTodo;
+
+    private void AddTodo()
+    {
+        if (!string.IsNullOrEmpty(newTodo))
+        {
+            todoItems.Add(new TodoItem
+                {
+                    Title = newTodo
+                });
+            newTodo = string.Empty;
+        }
+    }
+}
